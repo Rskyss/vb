@@ -1,6 +1,6 @@
 ---
 name: vibe-workflow
-description: Use when the user is a non-developer (product manager, founder, vibe coder) relying on AI to build software — before writing any code for a feature request, bug fix, or vague idea ("加个XX系统","你看着做"); when about to claim work is done; when the user asks about progress; or when preparing to commit, push, release or deploy. 适用于不会写代码的用户靠 AI 开发产品的全过程：接到需求（无论大小、无论多模糊）、修 bug、施工、宣布完成、汇报进度、提交推送、发版本、部署上线之前。
+description: Use when the user is a non-developer (product manager, founder, vibe coder) relying on AI to build software — before writing any code for a feature request, bug fix, or vague idea ("加个XX系统","你看着做"); when about to claim work is done; when the user asks about progress; or when preparing to commit, push or release. 适用于不会写代码的用户靠 AI 开发产品的全过程：接到需求（无论大小、无论多模糊）、修 bug、施工、宣布完成、汇报进度、提交推送、发版本之前。
 ---
 
 # Vibe Workflow — 非开发者的 AI 开发全流程规范
@@ -25,7 +25,7 @@ digraph flow {
     "关卡③ 自测全绿" [shape=box];
     "关卡④ 台账登记" [shape=box];
     "用户验收" [shape=box];
-    "发版本/上线(必先请示)" [shape=doublecircle];
+    "发版本(必先请示)" [shape=doublecircle];
 
     "接到需求" -> "大需求?(碰钱/动数据表/跨模块/超半天/用户说没想细)";
     "大需求?(碰钱/动数据表/跨模块/超半天/用户说没想细)" -> "走规划流程(references/规划流程-6A.md)" [label="是"];
@@ -35,7 +35,7 @@ digraph flow {
     "关卡② 施工(references/施工方法.md)" -> "关卡③ 自测全绿";
     "关卡③ 自测全绿" -> "关卡④ 台账登记";
     "关卡④ 台账登记" -> "用户验收";
-    "用户验收" -> "发版本/上线(必先请示)";
+    "用户验收" -> "发版本(必先请示)";
 }
 ```
 
@@ -49,7 +49,7 @@ digraph flow {
 
 - 技术方案你可以推荐并给理由，但影响用户体验/数据/花钱的决定必须用户点头
 - 该泼的冷水先泼：风险、做不到的、比用户想象贵的，动工前说，不要做完了才说
-- **用户明确说"别问了，你定"时**：委托的是决定权，不是知情权。可以动工，但你替他拍板的每一个决定列成清单，写进完工消息和台账，供他事后一眼纠错。他在指令里明说了"做完直接上线"才算部署授权，没说就仍要问
+- **用户明确说"别问了，你定"时**：委托的是决定权，不是知情权。可以动工，但你替他拍板的每一个决定列成清单，写进完工消息和台账，供他事后一眼纠错。他在指令里明说了"做完直接推"才算推送授权，没说就仍要问
 
 ### 关卡② 施工有章法
 
@@ -80,7 +80,9 @@ digraph flow {
 
 1. **一个版本＝远端恰好一个提交**：推送前把本地零碎提交合并成一个，标题 `vX.Y 一句话主题`，明细在正文按"新增功能/优化功能/修复bug"分组
 2. **推送前收尾做完**：台账、验收记录、版本号文案全部进这一个提交。**严禁推完再补零碎文档提交**——真实案例：某版本推完又补了一串 docs 提交，版本历史变成流水账，最终按用户指令强推改写历史才收拾干净
-3. **推送、打版本、部署都是对外动作**：每次都先问用户"要不要现在推/发 vX.Y"，不擅自执行
+3. **推送、打版本都是对外动作**：每次都先问用户"要不要现在推/发 vX.Y"，不擅自执行
+
+本规范的范围到"发版本"为止；部署上线不在流程内，用户主动提出时再单独对齐。
 
 ## 借口对照表
 
@@ -97,7 +99,7 @@ digraph flow {
 | "这个项目没有文档规范，我口头汇报就行" | 没有就建。台账是自举的，不依赖项目原有规范 |
 | "改动太小，不值得登记" | 小改动积累起来就是用户完全失去进度视野。一行也登记 |
 | "测试都过了，就是做完了" | 测试过 ≠ 用户流程通。真实环境走一遍才算 |
-| "时间紧，先上线再补流程" | 流程被跳过的那次就是出事故的那次。时间紧更要走关卡 |
+| "时间紧，先交付再补流程" | 流程被跳过的那次就是出事故的那次。时间紧更要走关卡 |
 | "用户催得急，问太多显得低效" | 问 3 个选择题花 2 分钟，做错方向返工花 2 小时 |
 | "我在聊天里说清楚了，等于登记了" | 聊天记录会丢、会过期、下个会话看不见。只有项目里的文档算数 |
 | "先推上去，文档随后补一个提交" | 版本历史立刻变流水账。收尾没做完就不要推 |
@@ -110,7 +112,7 @@ digraph flow {
 - 代码写在测试前面
 - 已连续完成 3 个以上任务，用户一次成果都没看过
 - 打出"做完了/搞定了/完成了"但说不出自测证据
-- 准备执行 git push / 部署命令，但没有用户这次的明确指令
+- 准备执行 git push，但没有用户这次的明确指令
 - 台账上次更新是三个任务之前
 - 心里出现"这次特殊，因为……"
 
