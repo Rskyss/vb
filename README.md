@@ -18,14 +18,22 @@
 
 skill 遵循 [Agent Skills 开放标准](https://agentskills.io)（SKILL.md 格式），主流 AI 编程工具均可使用。
 
-**Claude Code**
+**方式一：一键安装（推荐，适用于 Claude Code / Codex / Cursor 等主流工具）**
+
+```bash
+npx skills add Rskyss/vb
+```
+
+它会自动识别你在用的 AI 工具并装到正确位置。以后更新：`npx skills update`。
+
+**方式二：手动安装（Claude Code）**
 
 ```bash
 git clone https://github.com/Rskyss/vb.git
 cp -r vb/vibe-workflow ~/.claude/skills/
 ```
 
-（只想在某个项目用：改放到项目的 `.claude/skills/` 目录）
+（只想在某个项目用：改放到项目的 `.claude/skills/` 目录。不会命令行的话：GitHub 页面点绿色 Code 按钮 → Download ZIP，解压后把 `vibe-workflow` 文件夹拖进上述目录）
 
 **Codex CLI / Gemini CLI**
 
