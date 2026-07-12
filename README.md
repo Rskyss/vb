@@ -1,18 +1,13 @@
 <div align="center">
-
-# Vibe Workflow
-
-**给"不会写代码、靠 AI 做产品"的人装的一套 AI 工作纪律**
-
-让你的 AI 助手：不瞎猜需求、不谎报完成、不弄丢进度、不乱发版本。
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-开放标准-blue)](https://agentskills.io)
-[![支持工具](https://img.shields.io/badge/Claude%20Code%20·%20Codex%20·%20Cursor%20·%20Gemini%20CLI-兼容-orange)](#安装)
-
+  <h1>Vibe Workflow</h1>
+  <p><strong>给"不会写代码、靠 AI 做产品"的人装的一套 AI 工作纪律</strong></p>
+  <p>让你的 AI 助手：不瞎猜需求、不谎报完成、不弄丢进度、不乱发版本。</p>
+  <p>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
+    <a href="https://agentskills.io"><img src="https://img.shields.io/badge/Agent%20Skills-开放标准-blue" alt="Agent Skills"></a>
+    <img src="https://img.shields.io/badge/Claude%20Code%20·%20Codex%20·%20Cursor%20·%20Gemini%20CLI-兼容-orange" alt="支持工具">
+  </p>
 </div>
-
----
 
 ## 30 秒装好
 
@@ -21,8 +16,6 @@ npx skills add Rskyss/vb
 ```
 
 粘贴到终端回车，自动识别你在用的 AI 工具（Claude Code / Codex / Cursor 等）并装到正确位置。装完就生效，**之后你什么都不用做**——AI 接到开发任务时会自动遵守这套规矩。
-
----
 
 ## 你是不是也遇到过这些事
 
