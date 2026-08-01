@@ -1,0 +1,73 @@
+#!/bin/sh
+# 版本纪律拦截器：推向 main 的提交，标题必须是「vX.Y 一句话主题」。
+#
+# 为什么需要它：vibe-workflow 规定「一个版本＝远端恰好一个提交」，但文档挡不住
+# 理解偏差——真实项目里出过两次：用户说「这个改动不单独发版」，AI 理解成
+# 「不打版本号、但可以单独推一个提交」，于是往 main 推了零碎的 docs/fix 提交，
+# 两次都是用户事后翻 commit 列表才发现，两次都只能改写历史收拾。根因是规则只写了
+# 「发版时怎么推」，没堵住「不发版时能不能推」，有人（通常是 AI）就在空白处
+# 自行填了答案。所以做成机械拦截，不依赖谁的自觉。
+#
+# 想跑 CI 验证又还没到发版时机时，正确做法是推到临时分支（CI 照样跑，main
+# 保持干净），验证通过后再 squash 成一个 vX.Y 推 main。
+#
+# 确有例外需要放行时：git push --no-verify（请确保这是用户明确要求的）。
+
+remote_ref_prefix="refs/heads/main"
+zero="0000000000000000000000000000000000000000"
+bad=""
+
+while read -r _local_ref local_sha remote_ref remote_sha; do
+    # 只管 main；标签、其他分支一律放行
+    [ "$remote_ref" = "$remote_ref_prefix" ] || continue
+    # 删除分支不检查
+    [ "$local_sha" = "$zero" ] && continue
+
+    if [ "$remote_sha" = "$zero" ]; then
+        range="$local_sha"
+    else
+        range="$remote_sha..$local_sha"
+    fi
+
+    # 逐条检查即将推上去的提交标题。
+    # 固定用 git log --format='%h %s'（每行「短hash 标题」），格式确定；
+    # 别换成 rev-list --no-commit-header，那个只吐标题、会把 v0.92 当 hash 剥掉。
+    while IFS= read -r line; do
+        [ -z "$line" ] && continue
+        subject=${line#* }
+        case "$subject" in
+            v[0-9]*.[0-9]*\ *) ;;                     # v0.92 主题 / v0.91.4 主题
+            *) bad="$bad
+  $line" ;;
+        esac
+    done <<EOF
+$(git log --format='%h %s' "$range")
+EOF
+done
+
+if [ -n "$bad" ]; then
+    cat >&2 <<MSG
+
+╭─────────────────────────────────────────────────────────────╮
+│  推送被拦下：main 上只允许「vX.Y 一句话主题」格式的提交     │
+╰─────────────────────────────────────────────────────────────╯
+
+以下提交不符合版本命名规范：
+$bad
+
+规则（vibe-workflow「版本与推送规则」）：一个版本＝远端恰好一个提交。
+用户靠版本号感知产品进度，零碎的 docs/fix 提交会把记录搅浑。
+
+该怎么办：
+  · 还没到发版时机  → 本地提交攒着别推；要跑 CI 就推到临时分支
+                       （例：git push origin HEAD:ci-check-xxx）
+  · 到了发版时机    → 先把台账/文档收尾全部做完，再
+                       git reset --soft origin/main
+                       git commit   # 标题写 vX.Y 一句话主题，正文按三组分类
+  · 确属例外        → 经用户明确同意后 git push --no-verify
+
+MSG
+    exit 1
+fi
+
+exit 0
